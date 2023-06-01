@@ -11,5 +11,5 @@ const setTimetableSchema = new Schema([{
      studentPopulation: String
 }]);
 
-const createTimetable = mongoose.model('createTimeTable', setTimetableSchema);
-export default createTimetable;
+const timetable = mongoose.model('timetable', setTimetableSchema);
+export default timetable;

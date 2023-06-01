@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import express from 'express';
 import jsonwebtoken from 'jsonwebtoken';
 import Cors from 'cors';
-import createTimetable from './models/timtable.js';
+import timetable from './models/timtable.js';
 import students from './models/students.js';
 import venue from './models/venues.js';
 import admin from './models/admin.js';
@@ -31,12 +31,16 @@ app.post('/api/v1/course/create', async(req, res) => {
      const body = req.body;
      try {
           if(req.body.courses){
-               req.body.courses.map( async(course) => {
+               req.body.courses.map( async(course, index) => {
                     if(course.course !==''  && course.lecturer !=='' && course.assistingLecturer !=='' && course.startTime!=='' && course.endTime !== '' && course.day !== '' && course.studentPopulation !== ''){
-                         await createTimetable.create(body)
-                         res.status(200).send({status:'Ok', data: null, message: 'Course has been added successfully'})
+                         await timetable.create(course)
                     }else{
-                         res.status(400).send({status:'Failed', data: null, message: 'kindly fill all fields'})
+                         res.status(400).send({status:'Failed', data: course, message: 'kindly fill all fields'})
+                         return;
+                    }
+
+                    if(index == req.body.courses.length - 1 ){
+                         res.status(200).send({status:'Ok', data: null, message: 'Courses have been added successfully'})
                     }
                })
           }else{
@@ -52,7 +56,7 @@ app.post('/api/v1/course/create', async(req, res) => {
 // gets all courses
 app.get('/api/v1/course', async(req, res) => {
      try {
-          let data = await createTimetable.find()
+          let data = await timetable.find()
           res.status(200).send({status:'Ok', data: data, message: 'record fetched successfully'})
      } catch (error) {
           res.status(500).send({status: 'Failed', data: null, message : error.message})
@@ -64,7 +68,7 @@ app.put('/api/v1/course/update/:id', async(req, res) => {
      try {
           if(req.body && req.params.id){
                let id = req.params.id
-               let gottenVenue = createTimetable.findOneAndUpdate({_id: id}, req.body).then(data => {
+               let gottenVenue = timetable.findOneAndUpdate({_id: id}, req.body).then(data => {
                     if(!data){
                          res.status(400).send({status:'Failed', data: null, message: 'course not found'})
                     }else{
@@ -85,7 +89,7 @@ app.put('/api/v1/course/update/:id', async(req, res) => {
 app.delete('/api/v1/course/delete/:id', async(req, res) => {
      try {
           let id = req.params.id
-          await createTimetable.findOneAndDelete({_id:id}).then(data => {
+          await timetable.findOneAndDelete({_id:id}).then(data => {
                if(!data){
                     res.status(400).send({status:'Failed', data: null, message: 'course not found'})
                }else{
