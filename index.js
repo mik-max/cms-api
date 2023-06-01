@@ -30,12 +30,19 @@ app.get('/', (req, res) => res.status(200).send('Hello CleverProgrammers!!!!!. C
 app.post('/api/v1/course/create', async(req, res) => {
      const body = req.body;
      try {
-          if(body.course !==''  && body.lecturer !=='' && body.assistingLecturer !=='' && body.startTime!=='' && body.endTime !== '' && body.day !== '' && body.studentPopulation !== ''){
-               await createTimetable.create(body)
-               res.status(200).send({status:'Ok', data: null, message: 'Course has been added successfully'})
+          if(req.body.courses){
+               req.body.courses.map( async(course) => {
+                    if(course.course !==''  && course.lecturer !=='' && course.assistingLecturer !=='' && course.startTime!=='' && course.endTime !== '' && course.day !== '' && course.studentPopulation !== ''){
+                         await createTimetable.create(body)
+                         res.status(200).send({status:'Ok', data: null, message: 'Course has been added successfully'})
+                    }else{
+                         res.status(400).send({status:'Failed', data: null, message: 'kindly fill all fields'})
+                    }
+               })
           }else{
-               res.status(400).send({status:'Failed', data: null, message: 'kindly fill all fields'})
+               res.status(400).send({status:'Failed', data: null, message: 'kindly pass in courses'})
           }
+          
      } catch (error) {
           res.status(500).send({status: 'Failed', data: null, message : error.message})
      }
