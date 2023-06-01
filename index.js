@@ -192,7 +192,7 @@ app.post('/api/v1/admin/login', async (req, res) => {
                console.log(user)
                if (user) {
                     let id = user._id.toString()
-                    let claims = {id: id, userName: user.userName, role: user.role}
+                    let claims = {id: id, userName: user.userName, role: user.role, department: user.department}
                     const token = jwt.sign({
                          userName: req.body.userName
                     }, 'mikejwt$$')
