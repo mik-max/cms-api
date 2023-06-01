@@ -146,8 +146,9 @@ app.post('/api/v1/student/login', async (req, res) => {
      try {
          if(req.body.matricNumber !== ''){
                const student =  await students.findOne({matricNumber: req.body.matricNumber})
-               let id = student._id.toString()
+               
                if (student) {
+                    let id = student._id.toString()
                     const token = jwt.sign({
                          matricNumber:  req.body.matricNumber
                     }, 'mikejwt$$')
