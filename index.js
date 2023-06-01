@@ -165,11 +165,28 @@ app.post('/api/v1/student/login', async (req, res) => {
      }
     
  })
+// creates an admin
+ app.post('/api/v1/admin/create', async(req, res) => {
+     const body = req.body;
+     try {
+          if(body.userName !==''  && body.password !== '' && body.role !==''){
+               await admin.create(body)
+               res.status(200).send({status:'Ok', data: null, message: 'admin has been created successfully'})
+          }else{
+               res.status(400).send({status:'Failed', data: null, message: 'kindly fill all fields'})
+          }
+     } catch (error) {
+          res.status(500).send({status: 'Failed', data: null, message : error.message})
+     }
+
+})
 // admin login
 app.post('/api/v1/admin/login', async (req, res) => {
      try {
          if(req.body.userName !== '' && req.body.password !=''){
+          console.log(req.body.userName, req.body.password)
                const user =  await admin.findOne({userName: req.body.userName, password: req.body.password})
+               console.log(user)
                if (user) {
                     const token = jwt.sign({
                          userName: req.body.userName
