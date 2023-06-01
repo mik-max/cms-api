@@ -8,7 +8,8 @@ const setTimetableSchema = new Schema([{
      startTime: String,
      endTime: String,
      day: String,
-     studentPopulation: String
+     studentPopulation: String,
+     department: String
 }]);
 
 const timetable = mongoose.model('timetable', setTimetableSchema);
