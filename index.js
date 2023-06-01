@@ -183,15 +183,18 @@ app.post('/api/v1/student/login', async (req, res) => {
 // admin login
 app.post('/api/v1/admin/login', async (req, res) => {
      try {
+          
          if(req.body.userName !== '' && req.body.password !=''){
           console.log(req.body.userName, req.body.password)
                const user =  await admin.findOne({userName: req.body.userName, password: req.body.password})
                console.log(user)
                if (user) {
+                    let id = user._id.toString()
+                    let claims = {id: id, userName: user.userName, role: user.role}
                     const token = jwt.sign({
                          userName: req.body.userName
                     }, 'mikejwt$$')
-                    res.status(200).send({status:'Ok', data: {token: token}, message: 'Login is successful'}) 
+                    res.status(200).send({status:'Ok', data: {token, claims}, message: 'Login is successful'}) 
                }else{
                     res.status(404).send({status:'Failed', data: null, message: 'You are not an admin'})
                }
