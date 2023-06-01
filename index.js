@@ -169,8 +169,8 @@ app.post('/api/v1/student/login', async (req, res) => {
 app.post('/api/v1/admin/login', async (req, res) => {
      try {
          if(req.body.userName !== '' && req.body.password !=''){
-               const admin =  await admin.findOne({userName: req.body.userName, password: req.body.password})
-               if (admin) {
+               const user =  await admin.findOne({userName: req.body.userName, password: req.body.password})
+               if (user) {
                     const token = jwt.sign({
                          userName: req.body.userName
                     }, 'mikejwt$$')
