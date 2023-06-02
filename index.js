@@ -26,8 +26,8 @@ mongoose.connect(connectionURL)
  //API endpoints
 app.get('/', (req, res) => res.status(200).send('Hello CleverProgrammers!!!!!. CELZ4 API!!!🔥🔥'))
 
-// creates a course
-app.post('/api/v1/course/create', async(req, res) => {
+// creates a timetable
+app.post('/api/v1/timetable/create', async(req, res) => {
      const body = req.body;
      try {
           if(body.courses && body.createdBy !== '' && body.department !== '' && body.title !==''){
@@ -44,8 +44,8 @@ app.post('/api/v1/course/create', async(req, res) => {
 
 })
 
-// gets all courses
-app.get('/api/v1/course', async(req, res) => {
+// gets all timetables
+app.get('/api/v1/timetable', async(req, res) => {
      try {
           let data = await timetable.find()
           res.status(200).send({status:'Ok', data: data, message: 'record fetched successfully'})
@@ -54,8 +54,19 @@ app.get('/api/v1/course', async(req, res) => {
      }
     
 })
+//get timetable by creator
+app.get('/api/v1/timetable/:creator', async(req, res) => {
+     try {
+          let creator = req.params.creator
+          let data = await timetable.find({createdBy:creator})
+          res.status(200).send({status:'Ok', data: data, message: 'record fetched successfully'})
+     } catch (error) {
+          res.status(500).send({status: 'Failed', data: null, message : error.message})
+     }
+    
+})
 // updates a course
-app.put('/api/v1/course/update/:id', async(req, res) => {
+app.put('/api/v1/timetable/update/:id', async(req, res) => {
      try {
           if(req.body && req.params.id){
                let id = req.params.id
