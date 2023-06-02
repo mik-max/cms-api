@@ -30,7 +30,7 @@ app.get('/', (req, res) => res.status(200).send('Hello CleverProgrammers!!!!!. C
 app.post('/api/v1/course/create', async(req, res) => {
      const body = req.body;
      try {
-          if(body.courses && body.createdBy !== '' && body.department !== ''){
+          if(body.courses && body.createdBy !== '' && body.department !== '' && title !==''){
                await timetable.create(body)
                res.status(200).send({status:'Ok', data: null, message: 'Courses have been added successfully'})
           
