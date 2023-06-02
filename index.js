@@ -47,25 +47,24 @@ app.post('/api/v1/timetable/create', async(req, res) => {
 // gets all timetables
 app.get('/api/v1/timetable', async(req, res) => {
      try {
-          let data = await timetable.find()
-          res.status(200).send({status:'Ok', data: data, message: 'record fetched successfully'})
+          if(req.query.creator){
+               let data = await timetable.find({createdBy:req.query.creator})
+               res.status(200).send({status:'Ok', data: data, message: 'record fetched successfully'})
+          }else if(req.query.department){
+               
+               let data = await timetable.find({department:req.query.department})
+               res.status(200).send({status:'Ok', data: data, message: 'record fetched successfully'})
+          }else{
+               let data = await timetable.find()
+               res.status(200).send({status:'Ok', data: data, message: 'record fetched successfully'})
+          }
      } catch (error) {
           res.status(500).send({status: 'Failed', data: null, message : error.message})
      }
     
 })
-//get timetable by creator
-app.get('/api/v1/timetable/:creator', async(req, res) => {
-     try {
-          let creator = req.params.creator
-          let data = await timetable.find({createdBy:creator})
-          res.status(200).send({status:'Ok', data: data, message: 'record fetched successfully'})
-     } catch (error) {
-          res.status(500).send({status: 'Failed', data: null, message : error.message})
-     }
-    
-})
-// updates a course
+
+// updates a timetable
 app.put('/api/v1/timetable/update/:id', async(req, res) => {
      try {
           if(req.body && req.params.id){
