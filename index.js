@@ -182,7 +182,7 @@ app.post('/api/v1/student/login', async (req, res) => {
                     let claims = {id: id, matricNumber: student.matricNumber, name: student.name, department: student.department, faculty:student.faculty}
                     res.status(200).send({status:'Ok', data: {token, claims}, message: 'Login is successful'}) 
                }else{
-                    res.status(404).send({status:'Failed', data: null, message: 'You are not a member of this faculty!'})
+                    res.status(404).send({status:'Failed', data: null, message: 'You are not a student of this university!'})
                }
          }else{
                res.status(400).send({status:'Failed', data: null, message: 'kindly supply matric number'})
