@@ -101,8 +101,8 @@ app.put('/api/v1/timetable/update/:id', async(req, res) => {
           res.status(500).send({status: 'Failed', data: null, message : error.message})
      }
 })
-// deletes a course
-app.delete('/api/v1/course/delete/:id', async(req, res) => {
+// deletes a timetable
+app.delete('/api/v1/timetable/delete/:id', async(req, res) => {
      try {
           let id = req.params.id
           await timetable.findOneAndDelete({_id:id}).then(data => {
