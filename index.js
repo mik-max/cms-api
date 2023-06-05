@@ -63,6 +63,21 @@ app.get('/api/v1/timetable', async(req, res) => {
      }
     
 })
+// gets a timetable by Id
+app.get('/api/v1/timetable/:id', async(req, res) => {
+     try {
+          let id = req.params.id
+          if(id){
+               let data = await  timetable.findOne({_id: id})
+               res.status(200).send({status:'Ok', data: data, message: 'record fetched successfully'})
+          }else{
+              res.status(400).send({status:'Failed', data: null, message: 'Id is missing'})
+          }
+     } catch (error) {
+          res.status(500).send({status: 'Failed', data: null, message : error.message})
+     }
+    
+})
 
 // updates a timetable
 app.put('/api/v1/timetable/update/:id', async(req, res) => {
