@@ -5,7 +5,8 @@ const setTimetableSchema = new Schema([{
      title: String,
      courses: Array,
      createdBy: String,
-     department: String
+     department: String,
+     type: String,
 }]);
 
 const timetable = mongoose.model('timetable', setTimetableSchema);
