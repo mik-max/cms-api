@@ -7,6 +7,8 @@ import students from './models/students.js';
 import venue from './models/venues.js';
 import admin from './models/admin.js';
 import courses from './models/courses.js';
+import lecturer from './models/lecturers.js';
+import assistantLecturer from './models/assistant_lecturer.js';
 
 
 const jwt = jsonwebtoken
@@ -170,26 +172,26 @@ app.put('/api/v1/venue/update/:id', async(req, res) => {
 //creates a new course
 app.post('/api/v1/courses/create', async(req, res) => {
      try {
-          if(req.body !== [ ]){
+          if(req.body.courses &&  req.body.courses !== [ ]){
                for(let i =0; i < req.body.courses.length; i++){
 
                     if(i !== req.body.courses.length -1 ){
                          await courses.create(req.body.courses[i]) 
                     }else{
                          await courses.create(req.body.courses[i])
-                         res.status(200).send({status:'Ok', data: null, message: 'Courses has been created successfully'})
+                         res.status(200).send({status:'Ok', data: null, message: 'Courses have been created successfully'})
                     }
                }
                
           }else{
-               res.status(400).send({status:'Failed', data: null, message: 'kindly pass in at least on course'})
+               res.status(400).send({status:'Failed', data: null, message: 'kindly pass in at least one course'})
           }
      } catch (error) {
           res.status(500).send({status: 'Failed', data: null, message : error.message})
      }
 
 })
-
+// gets all courses
 app.get('/api/v1/courses', async (req, res) => {
      try {
           let data = await courses.find();
@@ -199,6 +201,68 @@ app.get('/api/v1/courses', async (req, res) => {
      }
 })
 
+
+
+//creates a new lecturer
+app.post('/api/v1/lecturers/create', async(req, res) => {
+     try {
+          if(req.body.lecturers && req.body.lecturers  !== [ ]){
+               if(!req.query.isAssistant){
+                    for(let i =0; i < req.body.lecturers.length; i++){
+
+                         if(i !== req.body.lecturers.length -1 ){
+                              await lecturer.create(req.body.lecturers[i]) 
+                         }else{
+                              await lecturer.create(req.body.lecturers[i])
+                              res.status(200).send({status:'Ok', data: null, message: 'Lecturers have been created successfully'})
+                         }
+                    }
+               }else{
+                    for(let i =0; i < req.body.lecturers.length; i++){
+
+                         if(i !== req.body.lecturers.length -1 ){
+                              await assistantLecturer.create(req.body.lecturers[i]) 
+                         }else{
+                              await assistantLecturer.create(req.body.lecturers[i])
+                              res.status(200).send({status:'Ok', data: null, message: 'Assistant lecturers have been created successfully'})
+                         }
+                    }
+               }
+               
+               
+          }else{
+               if(!req.query.isAssistant){
+                    res.status(400).send({status:'Failed', data: null, message: 'kindly pass in at least one lecturer'})
+               }else{
+                    res.status(400).send({status:'Failed', data: null, message: 'kindly pass in at least one assistant lecturer'})
+               }
+               
+          }
+     } catch (error) {
+          res.status(500).send({status: 'Failed', data: null, message : error.message})
+     }
+
+})
+
+// gets all courses
+app.get('/api/v1/lecturers', async (req, res) => {
+     if(!req.query.isAssistant){
+          try {
+               let data = await lecturer.find();
+               res.status(200).send({status:'Ok', data: data, message: 'Record fetched successfully'}) 
+          } catch (error) {
+               res.status(500).send({status: 'Failed', data: null, message : error.message})
+          }
+     }else{
+          try {
+               let data = await assistantLecturer.find();
+               res.status(200).send({status:'Ok', data: data, message: 'Record fetched successfully'}) 
+          } catch (error) {
+               res.status(500).send({status: 'Failed', data: null, message : error.message})
+          }
+     }
+   
+})
 
 // students login
 app.post('/api/v1/student/login', async (req, res) => {
