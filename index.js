@@ -6,7 +6,7 @@ import timetable from './models/timtable.js';
 import students from './models/students.js';
 import venue from './models/venues.js';
 import admin from './models/admin.js';
-
+import courses from './models/courses.js';
 
 
 const jwt = jsonwebtoken
@@ -162,6 +162,38 @@ app.put('/api/v1/venue/update/:id', async(req, res) => {
                res.status(400).send({status:'Failed', data: null, message: 'kindly fill all fields'})
           }
           
+     } catch (error) {
+          res.status(500).send({status: 'Failed', data: null, message : error.message})
+     }
+})
+
+//creates a new course
+app.post('/api/v1/courses/create', async(req, res) => {
+     try {
+          if(req.body !== [ ]){
+               for(let i =0; i < req.body.courses.length; i++){
+
+                    if(i !== req.body.courses.length -1 ){
+                         await courses.create(req.body.courses[i]) 
+                    }else{
+                         await courses.create(req.body.courses[i])
+                         res.status(200).send({status:'Ok', data: null, message: 'Courses has been created successfully'})
+                    }
+               }
+               
+          }else{
+               res.status(400).send({status:'Failed', data: null, message: 'kindly pass in at least on course'})
+          }
+     } catch (error) {
+          res.status(500).send({status: 'Failed', data: null, message : error.message})
+     }
+
+})
+
+app.get('/api/v1/courses', async (req, res) => {
+     try {
+          let data = await courses.find();
+          res.status(200).send({status:'Ok', data: data, message: 'Record fetched successfully'}) 
      } catch (error) {
           res.status(500).send({status: 'Failed', data: null, message : error.message})
      }
