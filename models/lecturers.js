@@ -3,6 +3,7 @@ const { Schema} = mongoose;
 
 const setLecturersSchema = new Schema([{
      name: String,
+     department: String
 }]);
 
 const lecturer = mongoose.model('lecturer', setLecturersSchema);
