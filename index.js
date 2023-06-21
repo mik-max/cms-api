@@ -20,7 +20,7 @@ const app = express();
 
  const port = process.env.PORT || 8000
 
- const connectionURL =`mongodb+srv://aniah_admin:scholarly20@cluster0.mvkgsdd.mongodb.net/timetable-management?retryWrites=true&w=majority`
+ const connectionURL =`mongodb+srv://mikecodes:uiPass1820@cluster0.rlir7co.mongodb.net/computer_science_db?retryWrites=true&w=majority`
 //  `mongodb+srv://aniah_admin:scholarly20@cluster0.mvkgsdd.mongodb.net/timetable-management?retryWrites=true&w=majority`
 //  `mongodb+srv://mikecodes:uiPass1820@cluster0.rlir7co.mongodb.net/computer_science_db?retryWrites=true&w=majority`
 
