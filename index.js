@@ -195,12 +195,16 @@ app.post('/api/v1/courses/create', async(req, res) => {
 })
 // gets all courses
 app.get('/api/v1/courses', async (req, res) => {
-     try {
-          let data = await courses.find();
-          res.status(200).send({status:'Ok', data: data, message: 'Record fetched successfully'}) 
-     } catch (error) {
-          res.status(500).send({status: 'Failed', data: null, message : error.message})
-     }
+    if(req.query.department){
+          try {
+               let data = await courses.find();
+               res.status(200).send({status:'Ok', data: data, message: 'Record fetched successfully'}) 
+          } catch (error) {
+               res.status(500).send({status: 'Failed', data: null, message : error.message})
+          }
+    }else{
+     res.status(400).send({status:'Failed', data: null, message: 'Department is required'})
+    }
 })
 
 
@@ -246,21 +250,29 @@ app.post('/api/v1/lecturers/create', async(req, res) => {
 
 })
 
-// gets all courses
+// gets all lecturers
 app.get('/api/v1/lecturers', async (req, res) => {
      if(!req.query.isAssistant){
-          try {
-               let data = await lecturer.find();
-               res.status(200).send({status:'Ok', data: data, message: 'Record fetched successfully'}) 
-          } catch (error) {
-               res.status(500).send({status: 'Failed', data: null, message : error.message})
+          if(req.query.department){
+               try {
+                    let data = await lecturer.find({department:req.query.department});
+                    res.status(200).send({status:'Ok', data: data, message: 'Record fetched successfully'}) 
+               } catch (error) {
+                    res.status(500).send({status: 'Failed', data: null, message : error.message})
+               }
+          }else{
+               res.status(400).send({status:'Failed', data: null, message: 'Department is required'})
           }
      }else{
-          try {
-               let data = await assistantLecturer.find();
-               res.status(200).send({status:'Ok', data: data, message: 'Record fetched successfully'}) 
-          } catch (error) {
-               res.status(500).send({status: 'Failed', data: null, message : error.message})
+          if(req.query.department){
+               try {
+                    let data = await assistantLecturer.find({department:req.query.department});
+                    res.status(200).send({status:'Ok', data: data, message: 'Record fetched successfully'}) 
+               } catch (error) {
+                    res.status(500).send({status: 'Failed', data: null, message : error.message})
+               }
+          }else{
+               res.status(400).send({status:'Failed', data: null, message: 'Department is required'})
           }
      }
    
